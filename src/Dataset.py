@@ -6,8 +6,9 @@ di manipolazione dei dati.
 
 import pandas as pd
 import os
-import re
 from Utility import *
+import numpy as np
+from KB import KB
 
 
 class Dataset:
@@ -23,7 +24,22 @@ class Dataset:
         except:
             raise IOError("Can't get the dataset. Path invalid or file inexistent.")
 
+    """
+    Metodo di accesso che restiuisce i dati che compongono il dataset.
+    
+    :return data: insieme di dati che compongono il dataset.
+    """
+    def getData(self) -> pd.DataFrame:
+        return self.data
 
+
+    """
+    Metodo di accesso che restituisce il nome del dataset.
+    """
+    def getNameDataset(self) -> str:
+        return self.name
+    
+    
     """
     Elabora i dati del dataset facendo varie operazioni costruendo nuove colonne ed eliminando valori inutili.
     """
@@ -135,6 +151,28 @@ class Dataset:
         self.data = self.data.map(converti_spazi_in_)
         
         print('Done.')
+
+
+    """
+    Metodo che permette di aggiungere delle informazioni al dataset grazie all'utilizzo della
+    KnowledgeBase (KN)
+    """
+    def addInformationsFromKB(self, kb: KB) -> None:
+        print('Adding information from KB...')
+        results = kb.ask('isInTuristNeigh(H, N)')
+        turisticNeigh = [item['H'] for item in results]
+        boolMap = np.isin(self.data['Id'].astype(str), turisticNeigh)
+        self.data['inTuristicNeighbourhood'] = boolMap
+        self.data['inTuristicNeighbourhood'] = self.data['inTuristicNeighbourhood'].astype(str)
+        self.data['inTuristicNeighbourhood'] = self.data['inTuristicNeighbourhood'].str.lower()
+        results = kb.ask('isInLuxuryNeigh(H, N)')
+        luxuryNeigh = [item['H'] for item in results]
+        boolMap = np.isin(self.data['Id'].astype(str), luxuryNeigh)
+        self.data['inLuxuryNeighbourhood'] = boolMap
+        self.data['inLuxuryNeighbourhood'] = self.data['inLuxuryNeighbourhood'].astype(str)
+        self.data['inLuxuryNeighbourhood'] = self.data['inLuxuryNeighbourhood'].str.lower()
+        print('New informations added to KB')
+
 
     """
     Salva il dataset in un file CSV nel percorso specificato in input.
