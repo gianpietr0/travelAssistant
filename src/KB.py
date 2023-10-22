@@ -119,7 +119,7 @@ class KB:
    def ask(self, query: str) -> list:
       try:
          print('Running query mode...', end = ' ')
-         self.prolog.consult('../knowledgeBase.')
+         self.prolog.consult('../knowledgeBase/rules.pl')
          print('Ready.')
          results = list(self.prolog.query(query))
          print('Query completed.')
