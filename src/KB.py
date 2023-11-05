@@ -6,6 +6,7 @@ della realizzazione e della manipolazione di una Knowledge Base.
 from pyswip import Prolog
 import pandas as pd
 from tqdm import tqdm
+import os
 
 
 class KB:
@@ -18,9 +19,26 @@ class KB:
      self.prolog = Prolog()
      self.housing = f'{path}housingFacts.pl'       #nome del file rappresentante la KB circa gli alloggi
      self.turism = f'{path}turismFacts.pl'         #nome del file rappresentante la KB circa le attrazioni turistiche
+     self.calendar = f'{path}calendar.pl'          #nome del file rappresentante la KB circa le disponibilità dei vari alloggi
+
+   """
+   Metodo che consente di aprire i file contenente le varie verità e regole.
+   In altre parole, effettua il consult permettendo di fare delle query successivamente.
+   """
+   def runQueryMode(self) -> None:
+      print('Running quey mode...', end = ' ')
+      self.prolog.consult('../knowledgeBase/rules.pl')
+      print('Done.')
 
    
-
+   """
+   Metodo che permette di creare i fatti relativi ai vari aspetti che copre il sistema.
+   """
+   def createfacts(self, listings: pd.DataFrame, turism: pd.DataFrame, calendar: pd.DataFrame) -> None:
+      self.createFactsListings(listings)
+      self.createFactsTurism(turism)
+      self.updateAvailability(calendar)
+      self.runQueryMode()
    """
    Metodo che permette di scrivere i fatti sulla KB circa gli alloggi a partire dai dati letti dal dataset di riferimento.
 
@@ -61,9 +79,10 @@ class KB:
           facts.append(f"prop('{item.iloc[0]}','host','{item.iloc[1]}').\n") #host dell' alloggio
           facts.append(f"prop('{item.iloc[0]}','minNights',{item.iloc[12]}).\n") #numero minimo delle notti di un alloggio
           facts.append(f"prop('{item.iloc[0]}','maxNights',{item.iloc[13]}).\n") #numero massimo delle notti di un alloggio
-          facts.append(f"prop('{item.iloc[0]}','bedrooms',{item.iloc[18]}).\n")       #numero camere da lette nell'alloggio
-          facts.append(f"prop('{item.iloc[0]}','beds',{item.iloc[19]}).\n") #numero letti nell'alloggio
-          facts.append(f"prop('{item.iloc[0]}','bath',{item.iloc[21]}).\n") #numero bagni nell'alloggio
+          facts.append(f"prop('{item.iloc[0]}','bedrooms',{int(item.iloc[18])}).\n")       #numero camere da lette nell'alloggio
+          facts.append(f"prop('{item.iloc[0]}','beds',{int(item.iloc[19])}).\n") #numero letti nell'alloggio
+          facts.append(f"prop('{item.iloc[0]}','bath',{int(item.iloc[21])}).\n") #numero bagni nell'alloggio
+          facts.append(f"prop('{item.iloc[0]}','accommodates',{int(item.iloc[10])}).\n")   #numero ospiti
           if bool(item.iloc[22]):
              facts.append(f"sharedBath('{item.iloc[0]}').\n")  #alloggio contiene bagno condiviso
           if bool(item.iloc[23]):
@@ -98,7 +117,7 @@ class KB:
    :param turism: dataset contenente le informazioni circa le attrazioni turistiche della citta.
    """
    def createFactsTurism(self, turism: pd.DataFrame) -> None:
-     facts = []
+     facts = [':- discontiguous prop/3.\n']
      for i, item in tqdm(turism.iterrows(), total = len(turism), desc = 'Creating facts turism'):
         #rappresentazione individui
         facts.append(f"attraction('{item.iloc[0]}').\n")
@@ -110,6 +129,41 @@ class KB:
         file.writelines(sorted(facts))
      print('Facts of turistic attractions created and saved.')
    
+
+   """
+   Metodo che permette di aggiornare le disponibilità dei vari alloggi.
+
+   :param availability: dataset contenente le informazioni circa le disponibilità giornaliere dei vari alloggi.
+   """
+   def updateAvailability(self, availability: pd.DataFrame) -> None:
+      facts = []   
+      print('Updating availability...', end = ' ')
+      for i in tqdm(range(len(availability))):
+         facts.append(f"available('{availability.iloc[i, 0]}', date({availability.iloc[i, 9]}, {availability.iloc[i, 8]}, {availability.iloc[i, 7]})).\n")
+      with open(self.calendar, 'w') as file:
+         file.writelines(facts)
+      print('Facts of aivalibility updated.')
+
+
+   """
+   Metodo che va a creare i fatti circa le stazioni metropolitane dal dataset corrispondente.
+   """
+   def createFactsTransport(self, stations: pd.DataFrame, lines: pd.DataFrame, connections: pd. DataFrame) -> None:
+      facts = [':- discontiguous prop/3.\n']
+      for i, item in tqdm(stations.iterrows(), total = len(stations), desc = 'Creating facts stations'):
+         facts.append(f"station({item.iloc[0]}).\n")
+         facts.append(f"prop(station({item.iloc[0]}), 'latitude', {item.iloc[1]}).\n")
+         facts.append(f"prop(station({item.iloc[0]}), 'longitude', {item.iloc[2]}).\n")
+         facts.append(f"prop(station({item.iloc[0]}), 'name', '{item.iloc[3]}').\n")
+      for i, item in tqdm(lines.iterrows(), total = len(lines), desc = 'Creating facts about lines'):
+         facts.append(f"line({item.iloc[0]}).\n")
+         facts.append(f"prop(line({item.iloc[0]}), 'name', '{item.iloc[1]}').\n")
+      for i, item in tqdm(connections.iterrows(), total = len(connections), desc = 'Creating facts about connections'):
+         facts.append(f"connection(station({item.iloc[0]}), station({item.iloc[1]}), line({item.iloc[2]})).\n")
+      with open('../knowledgeBase/transport.pl', 'w') as file:
+         file.writelines(facts)
+      print('Facts about transport created and saved.')
+
    """
    Metodo che permette di interagire con la KB permettendo di formulare delle query da porre al sistema.
 
@@ -118,9 +172,7 @@ class KB:
    """
    def ask(self, query: str) -> list:
       try:
-         print('Running query mode...', end = ' ')
-         self.prolog.consult('../knowledgeBase/rules.pl')
-         print('Ready.')
+         print('Running query...', end = ' ')
          results = list(self.prolog.query(query))
          print('Query completed.')
          return results

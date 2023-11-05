@@ -9,6 +9,8 @@ import os
 from Utility import *
 import numpy as np
 from KB import KB
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
 
 
 class Dataset:
@@ -20,7 +22,7 @@ class Dataset:
     def __init__(self, srcPath: str) -> None:
         try:
             self.name = os.path.basename(f'{srcPath}').split('.')[0]    #name of the dataset
-            self.data = pd.read_csv(f'{srcPath}', low_memory = False)                       #data of the dataset
+            self.data = pd.read_csv(f'{srcPath}', low_memory = False)   #data of the dataset
         except:
             raise IOError("Can't get the dataset. Path invalid or file inexistent.")
 
@@ -41,6 +43,20 @@ class Dataset:
     
     
     """
+    Metodo che restituisce il dataset contenente le variabili indipendenti.
+    """
+    def getInputData(self) -> pd.DataFrame:
+        return self.data.drop('PriceClass', axis = 1)
+
+
+    """
+    Metodo che restituisce il target del dataset.
+    """
+    def getTarget(self) -> pd.DataFrame:
+        return self.data['PriceClass']
+    
+
+    """
     Elabora i dati del dataset facendo varie operazioni costruendo nuove colonne ed eliminando valori inutili.
     """
     def preprocessData(self) -> None:
@@ -50,10 +66,13 @@ class Dataset:
         "Elimino colonne inutili"
         self.data = self.data.drop("NeighbourhoodGroup",axis=1)
         self.data = self.data.drop("ReviewsPerMonth",axis=1)
-        self.data = self.data.drop("NumberOfReviewsLtm",axis=1)
+        #self.data = self.data.drop("NumberOfReviewsLtm",axis=1)
         self.data = self.data.drop("HostResponseTime",axis=1)
         self.data = self.data.drop("License",axis=1)
 
+        #filtriamo le righe i cui prezzi risultano errati dall'analisi
+        self.data = self.data[self.data['Price'] >= 25]
+        self.data = self.data[self.data['Price'] <= 680]
         "Creo una nuova colonna Bedrooms"
         self.data['Bedrooms'] = self.data['Name'].str.extract(r'(\d+)\s*(?:bedroom|bedrooms)', expand=False)
 
@@ -143,16 +162,53 @@ class Dataset:
         self.data = self.data.drop('Name',axis=1)
         self.data = self.data.drop('LastReview',axis=1)
 
+        #risolvo conversione di accommodates nel tipo di dato desiderato (serve per convertirlo poi intero nella kb)
+        self.data['Accommodates'] = self.data['Accommodates'].astype(int)
+        "Trasformo valori NaN delle beds in accommodates"
+        self.data['Bedrooms'] = self.data['Bedrooms'].astype('str')
+        self.data['Beds'].fillna(self.data['Accommodates'], inplace=True)
+        self.data['Bedrooms'] = self.data['Bedrooms'].astype(int)
+        self.data['Beds'] = self.data['Beds'].astype(int)
+
+        "Trasformo i valori di Bedrooms maggiori di Accommodates"
+        self.data.loc[self.data['Bedrooms'] > self.data['Accommodates'], 'Bedrooms'] = self.data['Accommodates']
+        self.data.loc[self.data['Beds'] > self.data['Accommodates'], 'Beds'] = self.data['Accommodates']
+
+        "Elimino i valori errati di Baths"
+        self.data['Baths'] = np.where(self.data['RoomType'] == 'Hotel Room', 1, self.data['Baths'])
+
+        self.data = self.data.loc[self.data['Baths'] <= 6]
+
         "Converto tutto in minuscolo "
 
         self.data = self.data.map(converti_in_minuscolo)
 
         ' Funzione per convertire spazi in _ '
         self.data = self.data.map(converti_spazi_in_)
+
+        #creazione delle classi di prezzo
+        self.data['Price'] = self.data['Price'].astype(int)
+        economicThreshold = 75   #i prezzi inferiori alla soglia 75 sono considerati economici 
+        mediumThreshold = 205      #i prezzi compresi tra 130 e 205 sono considerati medi; i prezzi maggiori di 205 sono considerati lussuosi
+        self.data['PriceClass'] = pd.cut(self.data['Price'],
+                                         bins = [0, economicThreshold, mediumThreshold, self.data['Price'].max()],
+                                         labels = ['Economic', 'Medium', 'Premium'])
         
         print('Done.')
 
 
+    """
+    Metodo che processa il dataset 'calendar' permettendo l'estrazione delle date
+    in un formato utile all' elaborazione con KB.
+    """
+    def extractDate(self) -> None:
+        print('Preprocessing availability...', end = ' ')
+        self.data = self.data[self.data['available'] == 't']  #consideriamo solo i valori true
+        print('Done')
+        print('Extracting Date...', end = ' ')
+        self.data[['Year', 'Month', 'Day']] = self.data['date'].str.split('-', expand = True)
+        self.data = self.data.dropna()  #eliminiamo valori nulli presenti
+        print('Done.')
     """
     Metodo che permette di aggiungere delle informazioni al dataset grazie all'utilizzo della
     KnowledgeBase (KN)
@@ -172,6 +228,68 @@ class Dataset:
         self.data['inLuxuryNeighbourhood'] = self.data['inLuxuryNeighbourhood'].astype(str)
         self.data['inLuxuryNeighbourhood'] = self.data['inLuxuryNeighbourhood'].str.lower()
         print('New informations added to KB')
+
+
+    """
+    Metodo che va a processare i dati per poter effettuare l'apprendimento.
+    Si eliminano le colonne che potrebbe non influire sulla previsione del prezzo.
+    """
+    def processLearning(self) -> None:
+        print('Processing data for learning...', end = ' ')
+        self.name += 'Encoded'
+        self.data.drop(['Id', 'HostId', 'HostName', 'HostSince', 'HostResponseRate',
+                        'HostIsSuperhost', 'Price', 'Availability365', 'Latitude', 'Longitude','MinimumNights',
+                        'MaximumNights','NumberOfReviews','CalculatedHostListingsCount','NumberOfReviewsLtm', 'Beds', 'Rating'],
+                       axis = 1,
+                       inplace = True)
+        #self.data.drop(["Wifi", "Heating", "Kitchen", "CarbonMonoxideAlarm", "PetsAllowed", "TV", "Refrigerator", "Elevator", "AirConditioning", "Parking",
+        #                "inLuxuryNeighbourhood", "Rating", "Baths", 'Neighbourhood', 'MinimumNights','MaximumNights',
+        #                'NumberOfReviews','CalculatedHostListingsCount','NumberOfReviewsLtm', 'Beds'],
+        #               axis = 1,
+        #               inplace = True)
+
+        #self.data.drop('NumberOfReviews', axis = 1, inplace = True)
+        #self.data.drop('CalculatedHostListingsCount', axis = 1, inplace = True)
+        print('Done.')
+        self.encode()
+    
+    """
+    Metodo che va a processare i fati per effettuare il clusering.
+    """
+    def processClustering(self) -> None:
+        print('Processing for clustering...', end = ' ')
+        self.name += 'Cluster'
+        self.data.drop(['Id', 'HostId', 'HostName', 'HostSince', 'HostResponseRate',
+                        'HostIsSuperhost', 'Price', 'Availability365', 'Latitude', 'Longitude', 'MinimumNights',
+                        'MaximumNights','NumberOfReviews','CalculatedHostListingsCount','NumberOfReviewsLtm', 'Beds'],
+                       axis = 1,
+                       inplace = True)
+        self.data = pd.get_dummies(self.data, columns = ['Neighbourhood', 'RoomType'])
+        self.data.dropna(inplace = True)
+        self.data = self.data.replace({True: 1, False: 0, 'true': 1, 'false': 0, 'Economic' : 0, 'Medium' : 1, 'Premium': 2})
+        scalingColumns = ['Accommodates','Bedrooms', 'Rating', 'Baths', 'PriceClass']
+        scaler = StandardScaler()
+        self.data[scalingColumns] = scaler.fit_transform(self.data[scalingColumns])
+        print('Done.')
+       
+        
+    """
+    Metodo che va ad applicare al dataset la procedura di One-hot-encode
+    per codificare le variabili discrete presenti.
+    """
+    def encode(self) -> None:
+        print('Encoding and scaling dataset...', end = ' ')
+        
+        self.data = pd.get_dummies(self.data, columns = ['Neighbourhood', 'RoomType'])
+        #self.data.drop(['RoomType_hotel_room','RoomType_shared_room'],
+        #               axis = 1,
+        #               inplace = True)
+        self.data.dropna(inplace = True)
+        self.data = self.data.replace({True: 1, False: 0, 'true': 1, 'false': 0, 'Economic' : 0, 'Medium' : 1, 'Premium': 2})
+        scalingColumns = ['Accommodates', 'Bedrooms']
+        scaler = StandardScaler()
+        self.data[scalingColumns] = scaler.fit_transform(self.data[scalingColumns])
+        print('Done.')
 
 
     """
