@@ -1,0 +1,309 @@
+﻿id,latitude,longitude,name
+1,51.5028,-0.2801,Acton Town
+2,51.5143,-0.0755,Aldgate
+3,51.5154,-0.0726,Aldgate East
+4,51.5107,-0.013,All Saints
+5,51.5407,-0.2997,Alperton
+7,51.5322,-0.1058,Angel
+8,51.5653,-0.1353,Archway
+9,51.6164,-0.1331,Arnos Grove
+10,51.5586,-0.1059,Arsenal
+11,51.5226,-0.1571,Baker Street
+12,51.4431,-0.1525,Balham
+13,51.5133,-0.0886,Bank
+14,51.5204,-0.0979,Barbican
+15,51.5396,0.081,Barking
+16,51.5856,0.0887,Barkingside
+17,51.4905,-0.2139,Barons Court
+18,51.5121,-0.1879,Bayswater
+19,51.5148,0.0613,Beckton
+20,51.5087,0.055,Beckton Park
+21,51.5403,0.127,Becontree
+22,51.5504,-0.1642,Belsize Park
+24,51.527,-0.0549,Bethnal Green
+25,51.512,-0.1031,Blackfriars
+26,51.5867,-0.0417,Blackhorse Road
+27,51.5079,-0.0066,Blackwall
+28,51.5142,-0.1494,Bond Street
+29,51.5011,-0.0943,Borough
+30,51.4956,-0.325,Boston Manor
+31,51.6071,-0.1243,Bounds Green
+32,51.5273,-0.0208,Bow Church
+33,51.5269,-0.0247,Bow Road
+34,51.5766,-0.2136,Brent Cross
+36,51.5248,-0.0119,Bromley-By-Bow
+38,51.6028,-0.2641,Burnt Oak
+39,51.5481,-0.1188,Caledonian Road
+40,51.5392,-0.1426,Camden Town
+42,51.5051,-0.0209,Canary Wharf
+44,51.5113,-0.0904,Cannon Street
+45,51.6078,-0.2947,Canons Park
+47,51.5441,-0.1538,Chalk Farm
+48,51.5185,-0.1111,Chancery Lane
+49,51.508,-0.1247,Charing Cross
+51,51.6177,0.0755,Chigwell
+52,51.4946,-0.2678,Chiswick Park
+54,51.4618,-0.1384,Clapham Common
+55,51.4649,-0.1299,Clapham North
+56,51.4527,-0.148,Clapham South
+58,51.5955,-0.2502,Colindale
+59,51.418,-0.1778,Colliers Wood
+60,51.5129,-0.1243,Covent Garden
+61,51.4957,-0.0144,Crossharbour & London Arena
+63,51.5095,0.0276,Custom House
+65,51.5085,0.064,Cyprus
+66,51.5443,0.1655,Dagenham East
+67,51.5417,0.1469,Dagenham Heathway
+70,51.5223,-0.0173,Devons Road
+71,51.552,-0.2387,Dollis Hill
+72,51.5152,-0.3017,Ealing Broadway
+73,51.5101,-0.2882,Ealing Common
+74,51.492,-0.1973,Earl's Court
+75,51.5765,-0.397,Eastcote
+76,51.5168,-0.2474,East Acton
+77,51.5874,-0.165,East Finchley
+78,51.5394,0.0518,East Ham
+79,51.5093,-0.0021,East India
+80,51.4586,-0.2112,East Putney
+81,51.6137,-0.275,Edgware
+82,51.5199,-0.1679,Edgware Road (B)
+83,51.5203,-0.17,Edgware Road (C)
+84,51.4943,-0.1001,Elephant & Castle
+85,51.5496,0.1977,Elm Park
+87,51.5074,-0.1223,Embankment
+89,51.5282,-0.1337,Euston
+90,51.526,-0.1359,Euston Square
+91,51.596,0.0912,Fairlop
+92,51.5203,-0.1053,Farringdon
+93,51.6012,-0.1932,Finchley Central
+94,51.5472,-0.1803,Finchley Road
+95,51.5642,-0.1065,Finsbury Park
+96,51.4804,-0.195,Fulham Broadway
+97,51.5096,0.0716,Gallions Reach
+98,51.5765,0.0663,Gants Hill
+99,51.4945,-0.1829,Gloucester Road
+100,51.5724,-0.1941,Golders Green
+101,51.5018,-0.2267,Goldhawk Road
+102,51.5205,-0.1347,Goodge Street
+103,51.6132,0.0923,Grange Hill
+104,51.5238,-0.1439,Great Portland Street
+105,51.5423,-0.3456,Greenford
+107,51.5067,-0.1428,Green Park
+108,51.4915,-0.2754,Gunnersbury
+109,51.603,0.0933,Hainault
+110,51.4936,-0.2251,Hammersmith
+111,51.5568,-0.178,Hampstead
+112,51.5302,-0.2933,Hanger Lane
+113,51.5362,-0.2575,Harlesden
+114,51.5925,-0.3351,Harrow & Wealdstone
+115,51.5793,-0.3366,Harrow-on-the-Hill
+116,51.4669,-0.4227,Hatton Cross
+117,51.4713,-0.4524,Heathrow Terminals 1_2_3
+118,51.4598,-0.4476,Heathrow Terminal 4
+119,51.5829,-0.2259,Hendon Central
+120,51.5033,-0.0215,Heron Quays
+122,51.5009,-0.1925,High Street Kensington
+123,51.546,-0.104,Highbury & Islington
+124,51.5777,-0.1458,Highgate
+125,51.5538,-0.4499,Hillingdon
+126,51.5174,-0.12,Holborn
+127,51.5075,-0.206,Holland Park
+128,51.5526,-0.1132,Holloway Road
+129,51.5539,0.2184,Hornchurch
+130,51.4713,-0.3665,Hounslow Central
+131,51.4733,-0.3564,Hounslow East
+132,51.4734,-0.3855,Hounslow West
+133,51.5027,-0.1527,Hyde Park Corner
+134,51.5619,-0.4421,Ickenham
+135,51.4871,-0.0101,Island Gardens
+136,51.4884,-0.1053,Kennington
+137,51.5304,-0.225,Kensal Green
+138,51.4983,-0.2106,Kensington (Olympia)
+139,51.5507,-0.1402,Kentish Town
+140,51.5816,-0.3162,Kenton
+141,51.477,-0.285,Kew Gardens
+142,51.5471,-0.2047,Kilburn
+143,51.5351,-0.1939,Kilburn Park
+144,51.5846,-0.2786,Kingsbury
+145,51.5308,-0.1238,King's Cross St. Pancras
+146,51.5015,-0.1607,Knightsbridge
+147,51.5172,-0.2107,Ladbroke Grove
+148,51.4991,-0.1115,Lambeth North
+149,51.5119,-0.1756,Lancaster Gate
+150,51.5139,-0.2172,Latimer Road
+151,51.5113,-0.1281,Leicester Square
+153,51.5566,-0.0053,Leyton
+154,51.5683,0.0083,Leytonstone
+155,51.5123,-0.0396,Limehouse
+156,51.5178,-0.0823,Liverpool Street
+157,51.5052,-0.0864,London Bridge
+159,51.53,-0.1854,Maida Vale
+160,51.5712,-0.0958,Manor House
+161,51.5122,-0.094,Mansion House
+162,51.5136,-0.1586,Marble Arch
+163,51.5225,-0.1631,Marylebone
+164,51.5249,-0.0332,Mile End
+165,51.6082,-0.2103,Mill Hill East
+166,51.5108,-0.0863,Monument
+167,51.5186,-0.0886,Moorgate
+168,51.6294,-0.432,Moor Park
+169,51.4022,-0.1948,Morden
+170,51.5342,-0.1387,Mornington Crescent
+171,51.4902,-0.0145,Mudchute
+172,51.5542,-0.2503,Neasden
+173,51.5756,0.0899,Newbury Park
+176,51.4995,-0.3142,Northfields
+177,51.5483,-0.3687,Northolt
+178,51.5784,-0.3184,Northwick Park
+179,51.6111,-0.424,Northwood
+180,51.6004,-0.4092,Northwood Hills
+181,51.5237,-0.2597,North Acton
+182,51.5175,-0.2887,North Ealing
+184,51.5846,-0.3626,North Harrow
+185,51.5621,-0.3034,North Wembley
+186,51.5094,-0.1967,Notting Hill Gate
+188,51.5263,-0.0873,Old Street
+190,51.4813,-0.3522,Osterley
+191,51.4819,-0.113,Oval
+192,51.515,-0.1415,Oxford Circus
+193,51.5154,-0.1755,Paddington
+194,51.527,-0.2841,Park Royal
+195,51.4753,-0.2011,Parsons Green
+196,51.5366,-0.3232,Perivale
+197,51.5098,-0.1342,Piccadilly Circus
+198,51.4893,-0.1334,Pimlico
+199,51.5926,-0.3805,Pinner
+200,51.5313,0.0172,Plaistow
+201,51.5077,-0.0173,Poplar
+202,51.572,-0.2954,Preston Road
+203,51.5093,0.0336,Prince Regent
+205,51.4682,-0.2089,Putney Bridge
+206,51.5341,-0.2047,Queen's Park
+207,51.5942,-0.2861,Queensbury
+208,51.5107,-0.1877,Queensway
+209,51.4942,-0.2359,Ravenscourt Park
+210,51.5753,-0.3714,Rayners Lane
+211,51.5763,0.0454,Redbridge
+212,51.5234,-0.1466,Regent's Park
+213,51.4633,-0.3013,Richmond
+215,51.6171,0.0439,Roding Valley
+216,51.501,-0.0525,Rotherhithe
+217,51.5084,0.0465,Royal Albert
+218,51.519,-0.188,Royal Oak
+219,51.5091,0.0181,Royal Victoria
+220,51.5715,-0.4213,Ruislip
+222,51.5732,-0.4125,Ruislip Manor
+223,51.523,-0.1244,Russell Square
+224,51.5822,-0.0749,Seven Sisters
+225,51.5117,-0.056,Shadwell
+226,51.5046,-0.2187,Shepherd's Bush (C)
+227,51.5058,-0.2265,Shepherd's Bush (H)
+228,51.5227,-0.0708,Shoreditch
+229,51.4924,-0.1565,Sloane Square
+230,51.5808,0.0216,Snaresbrook
+231,51.4454,-0.2066,Southfields
+234,51.5011,-0.3072,South Ealing
+235,51.5646,-0.3521,South Harrow
+236,51.4941,-0.1738,South Kensington
+237,51.5701,-0.3081,South Kenton
+238,51.5007,-0.0191,South Quay
+239,51.5569,-0.3988,South Ruislip
+240,51.4154,-0.1919,South Wimbledon
+241,51.5917,0.0275,South Woodford
+242,51.495,-0.2459,Stamford Brook
+243,51.6194,-0.3028,Stanmore
+244,51.5221,-0.047,Stepney Green
+245,51.4723,-0.123,Stockwell
+246,51.5439,-0.2759,Stonebridge Park
+247,51.5416,-0.0042,Stratford
+248,51.4994,-0.1335,St. James's Park
+249,51.5347,-0.174,St. John's Wood
+250,51.5146,-0.0973,St. Paul's
+251,51.5569,-0.3366,Sudbury Hill
+252,51.5507,-0.3156,Sudbury Town
+253,51.4933,-0.0478,Surrey Quays
+254,51.5432,-0.1738,Swiss Cottage
+255,51.5111,-0.1141,Temple
+257,51.4361,-0.1598,Tooting Bec
+258,51.4275,-0.168,Tooting Broadway
+259,51.5165,-0.131,Tottenham Court Road
+260,51.5882,-0.0594,Tottenham Hale
+262,51.5106,-0.0743,Tower Gateway
+263,51.5098,-0.0766,Tower Hill
+264,51.5567,-0.1374,Tufnell Park
+265,51.4951,-0.2547,Turnham Green
+266,51.5904,-0.1028,Turnpike Lane
+267,51.559,0.251,Upminster
+268,51.5582,0.2343,Upminster Bridge
+269,51.5385,0.1014,Upney
+270,51.5352,0.0343,Upton Park
+271,51.5463,-0.4786,Uxbridge
+272,51.4861,-0.1253,Vauxhall
+273,51.4965,-0.1447,Victoria
+274,51.583,-0.0195,Walthamstow Central
+275,51.5775,0.0288,Wanstead
+276,51.5043,-0.0558,Wapping
+277,51.5247,-0.1384,Warren Street
+278,51.5235,-0.1835,Warwick Avenue
+279,51.5036,-0.1143,Waterloo
+281,51.5519,-0.2963,Wembley Central
+282,51.5635,-0.2795,Wembley Park
+283,51.521,-0.2011,Westbourne Park
+284,51.5097,-0.0265,Westferry
+285,51.501,-0.1254,Westminster
+286,51.518,-0.2809,West Acton
+287,51.4872,-0.1953,West Brompton
+288,51.6095,-0.1883,West Finchley
+289,51.5287,0.0056,West Ham
+290,51.5469,-0.1906,West Hampstead
+291,51.5795,-0.3533,West Harrow
+292,51.507,-0.0203,West India Quay
+293,51.4907,-0.2065,West Kensington
+294,51.5696,-0.4376,West Ruislip
+295,51.5194,-0.0612,Whitechapel
+296,51.512,-0.2239,White City
+297,51.5492,-0.2215,Willesden Green
+298,51.5326,-0.2478,Willesden Junction
+299,51.4214,-0.2064,Wimbledon
+300,51.4343,-0.1992,Wimbledon Park
+301,51.607,0.0341,Woodford
+302,51.6179,-0.1856,Woodside Park
+303,51.5975,-0.1097,Wood Green
+35,51.4627,-0.1145,Brixton
+6,51.6736,-0.607,Amersham
+23,51.4979,-0.0637,Bermondsey
+50,51.7052,-0.611,Chesham
+46,51.6679,-0.561,Chalfont & Latimer
+53,51.6543,-0.5183,Chorleywood
+214,51.6404,-0.4733,Rickmansworth
+62,51.647,-0.4412,Croxley
+280,51.6573,-0.4177,Watford
+221,51.5606,-0.4103,Ruislip Gardens
+121,51.6503,-0.1943,High Barnet
+261,51.6302,-0.1791,Totteridge & Whetstone
+57,51.6517,-0.1496,Cockfosters
+187,51.6476,-0.1318,Oakwood
+232,51.6322,-0.128,Southgate
+88,51.6937,0.1139,Epping
+256,51.6717,0.1033,Theydon Bois
+68,51.6455,0.0838,Debden
+158,51.6412,0.0558,Loughton
+37,51.6266,0.0471,Buckhurst Hill
+204,51.5343,-0.0139,Pudding Mill Lane
+233,51.504,-0.1052,Southwark
+41,51.4982,-0.0502,Canada Water
+43,51.5147,0.0082,Canning Town
+183,51.5005,0.0039,North Greenwich
+64,51.4827,-0.0096,Cutty Sark
+106,51.4781,-0.0149,Greenwich
+69,51.474,-0.0216,Deptford Bridge
+86,51.4693,-0.0174,Elverson Road
+152,51.4657,-0.0142,Lewisham
+174,51.4767,-0.0327,New Cross
+175,51.4757,-0.0402,New Cross Gate
+304,51.5027,0.0226,West Silvertown
+307,51.502,0.0627,King George V
+305,51.5021,0.0319,Pontoon Dock
+306,51.5037,0.0488,London City Airport
+308,51.47006,-0.49108,Heathrow Terminal 5
+309,51.510031,-0.224301,Wood Lane
