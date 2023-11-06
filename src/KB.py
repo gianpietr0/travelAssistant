@@ -34,10 +34,11 @@ class KB:
    """
    Metodo che permette di creare i fatti relativi ai vari aspetti che copre il sistema.
    """
-   def createfacts(self, listings: pd.DataFrame, turism: pd.DataFrame, calendar: pd.DataFrame) -> None:
+   def createfacts(self, listings: pd.DataFrame, turism: pd.DataFrame, calendar: pd.DataFrame, stations: pd.DataFrame, lines : pd.DataFrame, connections: pd.DataFrame) -> None:
       self.createFactsListings(listings)
       self.createFactsTurism(turism)
       self.updateAvailability(calendar)
+      self.createFactsTransport(stations, lines, connections)
       self.runQueryMode()
    """
    Metodo che permette di scrivere i fatti sulla KB circa gli alloggi a partire dai dati letti dal dataset di riferimento.
@@ -149,7 +150,7 @@ class KB:
    Metodo che va a creare i fatti circa le stazioni metropolitane dal dataset corrispondente.
    """
    def createFactsTransport(self, stations: pd.DataFrame, lines: pd.DataFrame, connections: pd. DataFrame) -> None:
-      facts = [':- discontiguous prop/3.\n']
+      facts = [':- discontiguous line/1.\n:- discontiguous station/1.\n:- discontiguous prop/3.\n']
       for i, item in tqdm(stations.iterrows(), total = len(stations), desc = 'Creating facts stations'):
          facts.append(f"station({item.iloc[0]}).\n")
          facts.append(f"prop(station({item.iloc[0]}), 'latitude', {item.iloc[1]}).\n")
@@ -160,6 +161,7 @@ class KB:
          facts.append(f"prop(line({item.iloc[0]}), 'name', '{item.iloc[1]}').\n")
       for i, item in tqdm(connections.iterrows(), total = len(connections), desc = 'Creating facts about connections'):
          facts.append(f"connection(station({item.iloc[0]}), station({item.iloc[1]}), line({item.iloc[2]})).\n")
+         facts.append(f"connection(station({item.iloc[1]}), station({item.iloc[0]}), line({item.iloc[2]})).\n")
       with open('../knowledgeBase/transport.pl', 'w') as file:
          file.writelines(facts)
       print('Facts about transport created and saved.')
@@ -172,9 +174,7 @@ class KB:
    """
    def ask(self, query: str) -> list:
       try:
-         print('Running query...', end = ' ')
          results = list(self.prolog.query(query))
-         print('Query completed.')
          return results
       except:
          print('Error. Query invalid.')

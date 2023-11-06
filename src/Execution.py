@@ -8,7 +8,14 @@ from KB import KB
 from ModelPrediction import ModelPrediciton
 from lib.learnProblem import Data_from_file
 from lib.learnKMeans import K_means_learner
+from  lib.searchProblem import Search_problem_from_explicit_graph, Path, Arc
+from lib.searchGeneric import AStarSearcher
+from lib.searchMPP import SearcherMPP
 import copy
+import re
+import time
+import matplotlib.pyplot as plt
+
 
 class Execution():
     """
@@ -35,29 +42,316 @@ class Execution():
         connections = Dataset('../dataset/connections.csv')
         print('Done.')
         kb = KB('../knowledgeBase/')
-        kb.createfacts(housing.getData(), turism.getData(), calendar.getData())
-        kb.createFactsTransport(stations.getData(), lines.getData(), connections.getData())
+        kb.createfacts(housing.getData(), turism.getData(), calendar.getData(), stations.getData(), lines.getData(), connections.getData())
         housing.addInformationsFromKB(kb)
         housing.save('../dataset/')
+        
+        #unsupervised learning
         housingCluster = copy.deepcopy(housing)
-        housing.processLearning()
-        housing.save('../dataset/')
         housingCluster.processClustering()
         housingCluster.save('../dataset/')
+        Execution.runClustering(housingCluster, housing)
+
         
         #supervised learning
+        housing.processLearning()
+        housing.save('../dataset/')
         model = ModelPrediciton(housing.getInputData(), housing.getTarget())
         model.trainModel()
 
-        #unsupervised learning
-        Execution.runClustering(housingCluster)
+        #search problem 
+        stations = kb.ask('station(X).')
+        nodes = []
+        arcs = []
+        for item in stations:
+            nodes.append(item['X'])
+        print(nodes)
+        results = kb.ask('connection(Station1, Station2, _).')
+        for item in results:
+            match1 = re.search(r'\d+', item['Station2'])
+            match2 = re.search(r'\d+', item['Station1'])
+            station1 = int(match1.group())
+            station2 = int(match2.group())
+            distance = kb.ask(f'distance(station({station1}), station({station2}), D).')
+            arcs.append(Arc(station1, station2, distance[0]['D']))
+        hmap = {}   #euristica
+        for item in nodes:
+            results = kb.ask(f'distance(station(183), station({item}), D).')    #distanza verso un obiettivo fittizio
+            heuristic = results[0]['D']
+            hmap[item] = heuristic
+        problemSize = [2,6,8,14,21,23]  #dimensione dei problemi di esperimento
+        timeAlgorithm1 = [] #lista del tempo impiegato nei vari algoritmi
+        timeAlgorithm2 = []
 
+        #attempt 1
+        problem = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 42,
+                                                     goals = {183}
+                                                     )
+        problemHeuristic = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 42,
+                                                     goals = {183},
+                                                     hmap = hmap
+                                                     )
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problem)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm1.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        #heuristic
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problemHeuristic)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm2.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca con euristica : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        
+        
+
+        #attempt 2
+        problem = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 233,
+                                                     goals = {183}
+                                                     )
+        problemHeuristic = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 233,
+                                                     goals = {183},
+                                                     hmap = hmap
+                                                     )
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problem)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm1.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        #heuristic
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problemHeuristic)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm2.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca con euristica : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        
+        
+        #attempt 3
+        problem = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 285,
+                                                     goals = {183}
+                                                     )
+        problemHeuristic = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 285,
+                                                     goals = {183},
+                                                     hmap = hmap
+                                                     )
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problem)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm1.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        #heuristic
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problemHeuristic)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm2.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca con euristica : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        
+        #attempt 4
+        problem = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 123,
+                                                     goals = {183}
+                                                     )
+        problemHeuristic = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 123,
+                                                     goals = {183},
+                                                     hmap = hmap
+                                                     )
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problem)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm1.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        #heuristic
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problemHeuristic)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm2.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca con euristica : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        
+        #attempt 5
+        problem = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 300,
+                                                     goals = {183}
+                                                     )
+        problemHeuristic = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 300,
+                                                     goals = {183},
+                                                     hmap = hmap
+                                                     )
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problem)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm1.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        #heuristic
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problemHeuristic)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm2.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca con euristica : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        
+        #attempt 6 
+        problem = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 302,
+                                                     goals = {183}
+                                                     )
+        problemHeuristic = Search_problem_from_explicit_graph("Find railway path",
+                                                     nodes = nodes,
+                                                     arcs = arcs,
+                                                     start = 302,
+                                                     goals = {183},
+                                                     hmap = hmap
+                                                     )
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problem)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm1.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        #heuristic
+        startTime = time.perf_counter()
+        searcher = SearcherMPP(problemHeuristic)
+        solutionPath = searcher.search()
+        endTime = time.perf_counter()
+        elapsedTime = (endTime - startTime)
+        timeAlgorithm2.append(elapsedTime)
+        #problem.setSolution(solutionPath)
+        #problem.show()
+        if solutionPath:
+            print('Solution path: ', solutionPath)
+            print(f'Tempo di ricerca con euristica : {elapsedTime} secondi.')
+        else:
+            print('Nessuna soluzione trovata.')
+        
+        plt.plot(problemSize, timeAlgorithm1, label="Senza euristica")
+        plt.plot(problemSize, timeAlgorithm2, label="Con euristica")
+        plt.xlabel("Dimensione soluzione")
+        plt.ylabel("Tempo di Esecuzione (s)")
+        plt.legend()
+        plt.title("Confronto del Tempo di Esecuzione tra non euristica ed euristica")
+        plt.show()
+        
 
     """
     Metodo che esegue il clustering degli alloggi.
     """    
-    def runClustering(housing: Dataset) -> None:
-        dataset = Data_from_file(f'../dataset/{housing.getNameDataset()}.csv',
+    def runClustering(housingCluster: Dataset, housing: Dataset) -> None:
+        dataset = Data_from_file(f'../dataset/{housingCluster.getNameDataset()}.csv',
                          prob_test = 0,
                          has_header= True,
                          target_index = 100)

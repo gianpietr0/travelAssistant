@@ -13,6 +13,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import f1_score, precision_score, recall_score
 import pandas as pd
 import joblib
+import pickle
 
 class ModelPrediciton:
     """
@@ -81,7 +82,8 @@ class ModelPrediciton:
         print(f'Il miglor modello è {bestModelName}')
         #saving the best model
         print('Saving best model...', end = ' ')
-        joblib.dump(bestModel, f'../models/{bestModelName}.pkl')
+        with open(f'../models/{bestModelName}.pickle', 'wb') as file:
+            pickle.dump(bestModel, file)
         print('Done.')
 
 

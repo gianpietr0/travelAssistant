@@ -8,7 +8,7 @@
 # Attribution-NonCommercial-ShareAlike 4.0 International License.
 # See: http://creativecommons.org/licenses/by-nc-sa/4.0/deed.en
 
-from display import Displayable
+from lib.display import Displayable
 import matplotlib.pyplot as plt
 import random
 
@@ -84,6 +84,7 @@ class Search_problem_from_explicit_graph(Search_problem):
         else:
             self.positions = positions
         self.show_costs = show_costs
+        self.solution = None       #aggiunta dell'attributo soluzione
 
 
     def start_node(self):
@@ -113,28 +114,47 @@ class Search_problem_from_explicit_graph(Search_problem):
             res += f"{arc}.  "
         return res
 
-    def show(self, fontsize=10, node_color='orange', show_costs = None):
+    """
+    Metodo che salva la soluzione trovata.
+    """
+    def setSolution(self, path):
+        self.solution = path
+
+
+    def show(self, fontsize=10, node_color='white', show_costs = None):
         """Show the graph as a figure
         """
         self.fontsize = fontsize
         if show_costs is not None: # override default defintion
             self.show_costs = show_costs
-        plt.ion()   # interactive
+        #plt.ion()   # interactive
         ax = plt.figure().gca()
         ax.set_axis_off()
         plt.title(self.title, fontsize=fontsize)
         self.show_graph(ax, node_color)
+        plt.show()
 
-    def show_graph(self, ax, node_color='orange'): 
+    def show_graph(self, ax, node_color='white'): 
         bbox = dict(boxstyle="round4,pad=1.0,rounding_size=0.5",facecolor=node_color)
         for arc in self.arcs:
             self.show_arc(ax, arc)
         for node in self.nodes:
             self.show_node(ax, node, node_color = node_color)
+        if self.solution:
+            solutionNodes = list(self.solution.nodes())
+            for i in range(len(solutionNodes) - 1):
+                from_node = solutionNodes[i]
+                to_node = solutionNodes[i + 1]
+                self.show_arc(ax, Arc(from_node, to_node), arc_color = 'red', node_color = 'orange')
+        self.show_node(ax, self.start, node_color = 'red')
 
     def show_node(self, ax, node, node_color):
+            if node == self.start:
+                node_color = 'red'
+            elif node in self.goals:
+                node_color = 'green'
             x,y = self.positions[node]
-            ax.text(x,y,node,bbox=dict(boxstyle="round4,pad=1.0,rounding_size=0.5",
+            ax.text(x,y,node,bbox=dict(boxstyle="round4,pad=0.2,rounding_size=0.2",
                                                   facecolor=node_color), ha='center',va='center',
                          fontsize=self.fontsize)
         
@@ -144,15 +164,15 @@ class Search_problem_from_explicit_graph(Search_problem):
             ax.annotate(arc.to_node, from_pos, xytext=to_pos,
                                 # arrowprops=dict(facecolor='black', shrink=0.1, width=2),
                                 arrowprops={'arrowstyle':'<|-', 'linewidth': 2, 'color':arc_color},
-                                bbox=dict(boxstyle="round4,pad=1.0,rounding_size=0.5",
+                                bbox=dict(boxstyle="round4,pad=0.2,rounding_size=0.2",
                                                  facecolor=node_color),
                                 ha='center',va='center',
                                 fontsize=self.fontsize)
             # Add costs to middle of arcs:
-            if self.show_costs:
-                ax.text((from_pos[0]+to_pos[0])/2, (from_pos[1]+to_pos[1])/2,
-                         arc.cost, bbox=dict(pad=1,fc='w',ec='w'),
-                         ha='center',va='center',fontsize=self.fontsize)
+            #if self.show_costs:
+            #    ax.text((from_pos[0]+to_pos[0])/2, (from_pos[1]+to_pos[1])/2,
+            #             arc.cost, bbox=dict(pad=1,fc='w',ec='w'),
+            #             ha='center',va='center',fontsize=self.fontsize)
 
 class Path(object):
     """A path is either a node or a path followed by an arc"""
