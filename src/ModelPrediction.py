@@ -82,7 +82,7 @@ class ModelPrediciton:
         print(f'Il miglor modello è {bestModelName}')
         #saving the best model
         print('Saving best model...', end = ' ')
-        with open(f'../models/{bestModelName}.pickle', 'wb') as file:
+        with open(f'../models/modelPrediction.pickle', 'wb') as file:
             pickle.dump(bestModel, file)
         print('Done.')
 
