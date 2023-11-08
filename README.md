@@ -35,9 +35,14 @@
 # Come eseguire il codice
 
 **Scaricare dataset dai link forniti**
+
 Per via della dimensione eccessiva per poter essere caricati su GitHub, i dataset fondamentali per l'esecuzione corretta e completa del programma sono stati caricati su una cartella condivisa su Google Drive.
 Il link alla cartella è il seguente:
 https://drive.google.com/drive/folders/10fW_FWgJq8uC7DeoUbCVih-eD200hcrZ?usp=sharing
+
+Il file che è necessario scaricare è calendar.csv e bisogna metterlo nella cartella dataset insieme agli altri dataset già presenti. 
+Il link per il download del file è il seguente:
+https://drive.google.com/file/d/1LenpCxum2XxDvbo0ZlmLyLY-cuXMukwh/view?usp=drive_link
 
 **Bisogna innanzitutto recarsi nella cartella src :**
 
