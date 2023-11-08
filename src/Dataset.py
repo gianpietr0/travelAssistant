@@ -286,7 +286,7 @@ class Dataset:
         #               inplace = True)
         self.data.dropna(inplace = True)
         self.data = self.data.replace({True: 1, False: 0, 'true': 1, 'false': 0, 'Economic' : 0, 'Medium' : 1, 'Premium': 2})
-        scalingColumns = ['Accommodates', 'Bedrooms']
+        scalingColumns = ['Accommodates', 'Bedrooms', 'Baths']
         scaler = StandardScaler()
         self.data[scalingColumns] = scaler.fit_transform(self.data[scalingColumns])
         print('Done.')

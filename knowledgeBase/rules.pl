@@ -4,6 +4,7 @@
 :-include('housingFacts.pl').
 :-include('turismFacts.pl').
 :-include('calendar.pl').
+:-include('transport.pl').
 :- discontiguous prop/3.
 
 
@@ -23,18 +24,26 @@ isNearAttraction(H, T):- housing(H), attraction(T), distance(H, T, D), D < 2000.
 
 sameNeigh(X1, X2):- prop(X1, 'neighbourhood', N), prop(X2, 'neighbourhood', N).
 
-% regola che calcola la distanza tra due punti di riferimento (alloggio e/o attrazione)
+% regola che calcola la distanza tra due punti di riferimento
 
 distance(H, T, D):- prop(H, 'latitude', Lat1), prop(H, 'longitude', Lon1),
-    prop(T, 'latitude', Lat2), prop(T, 'longitude', Lon2), haversine(Lat1, Lon1, Lat2, Lon2, Distance),
+    prop(T, 'latitude', Lat2), prop(T, 'longitude', Lon2), calculate_distance(Lat1, Lon1, Lat2, Lon2, Distance),
     D is Distance.
 
 % regola che applica la formula di haversine per calcolare la distanza
 
-haversine(Lat1, Lon1, Lat2, Lon2, Distance):- DLat is Lat2 - Lat1, DLon is Lon2 - Lon1, A is sin(DLat / 2) ** 2 + cos(Lat1) * cos(Lat2) * sin(DLon / 2) ** 2,
+haversine(Lat1, Lon1, Lat2, Lon2, Distance):- DLat is Lat2 - Lat1,
+    DLon is Lon2 - Lon1,
+    A is (sin(DLat / 2) ** 2) + cos(Lat1) * cos(Lat2) * (sin(DLon / 2) ** 2),
     C is 2 * atan2(sqrt(A), sqrt(1 - A)),
-    Radius is 6371000,  % Raggio medio della Terra in metri
+    Radius is 6371.0,
     Distance is Radius * C.
+
+% regola che consente il calcolo della distanza tra due punti in linea d aria
+calculate_distance(Lat1, Lon1, Lat2, Lon2, Distance) :-
+    DeltaLat is abs(Lat1 - Lat2),
+    DeltaLon is abs(Lon1 - Lon2),
+    Distance is sqrt(DeltaLat**2 + DeltaLon**2) * 111319.9 /1000.
 
 
 % fatti circa il numero di giorni nei vari mesi

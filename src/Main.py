@@ -32,33 +32,8 @@ class Main:
         except:
             print('Missing run option.\nPlease use user or admin.')
 
-#if __name__ == '__main__':
-#    Main.main()
-
-#data = Dataset('../dataset/datasetListingsPreprocessed.csv')
-#data.processClustering()
-#data.save('../dataset/')
-#dataset = Data_from_file('../dataset/datasetListingsPreprocessedCluster.csv',
-#                         prob_test = 0,
-#                         has_header= True,
-#                         target_index = 100)
-#data = Dataset('../dataset/datasetListingsPreprocessed.csv')
-#
-#km = K_means_learner(dataset)
-#nCluster = km.elbow_rule(3)
-#facts = []
-#optimalK = K_means_learner(dataset, nCluster)
-#optimalK.learn()
-#clusterAssignments = [optimalK.class_of_eg(eg) for eg in dataset.train]
-#print(len(dataset.train))
-#print(set(clusterAssignments))
-#for i in range(len(dataset.train)):
-#    facts.append(f"prop('{data.getData().iloc[i, 0]}', 'cluster', '{clusterAssignments[i]}').\n")
-#with open('../dataset/housingFacts.pl', 'a') as file:
-#    file.writelines(facts)
-#print(f'Il numero ottimale di Clusters generati è: {nCluster}')
-
-
+if __name__ == '__main__':
+    Main.main()
 
 #data = pd.read_csv('../dataset/datasetListingsPreprocessedEncoded.csv')
 #variabili = ["Accommodates", "Bedrooms", "Rating", "Baths", "Shared", "Wifi", "Heating", "Kitchen",
@@ -94,11 +69,3 @@ class Main:
 #    plt.title(f"Grafico a barre di {variabile} rispetto a PriceClass")
 #    plt.legend(title="PriceClass")
 #    plt.show()
-
-print('Reading dataset of transports...', end = ' ')
-stations = Dataset('../dataset/stations.csv')
-lines = Dataset('../dataset/lines.csv')
-connections = Dataset('../dataset/connections.csv')
-print('Done.')
-kb = KB('../knowledgeBase/')
-kb.createFactsTransport(stations.getData(), lines.getData(), connections.getData())
